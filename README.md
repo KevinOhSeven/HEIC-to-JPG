@@ -2,6 +2,8 @@
 
 ![image](https://github.com/user-attachments/assets/c5c068a6-6c84-407e-8509-be28f53c01fe)
 
+![image](https://github.com/user-attachments/assets/6a1bf960-d1cc-4bc9-b365-9a26b3b3a3e1)
+
 
 ## Overview
 The **Bulk HEIC to JPG Converter** is a simple, user-friendly desktop application for Windows that converts multiple HEIC image files to JPG format. It features a modern graphical interface for ease of use, making it suitable for photographers, content creators, and everyday users.
