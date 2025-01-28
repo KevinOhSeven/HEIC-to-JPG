@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>HEIC to JPG Converter</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600&display=swap');
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            padding: 0;
+            background-color: #e0f7fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 90%;
+            max-width: 500px;
+            transition: transform 0.3s ease;
+        }
+
+        .container:hover {
+            transform: scale(1.05);
+        }
+
+        h1 {
+            font-size: 28px;
+            color: #00796b;
+            margin-bottom: 20px;
+        }
+
+        input[type="file"] {
+            margin-bottom: 20px;
+            padding: 12px;
+            border: 2px dashed #00796b;
+            border-radius: 15px;
+            background-color: #e0f7fa;
+            outline: none;
+            transition: background-color 0.2s ease;
+        }
+
+        input[type="file"]:hover {
+            background-color: #b2dfdb;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 15px 30px;
+            color: #fff;
+            background-color: #00acc1;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .button:hover {
+            background-color: #00838f;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .progress-container {
+            width: 100%;
+            background-color: #f1f1f1;
+            border-radius: 20px;
+            margin: 10px 0;
+            position: relative;
+        }
+
+        .progress-bar {
+            width: 0%;
+            height: 20px;
+            border-radius: 20px;
+            background-color: #00acc1;
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            font-size: 14px;
+            color: #00796b;
+            line-height: 20px;
+            top: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>HEIC to JPG Converter</h1>
+        <input type="file" id="heicUpload" accept=".heic" multiple>
+        <button class="button" id="convertButton">Convert to JPG</button>
+
+        <!-- Overall progress bar -->
+        <div class="progress-container">
+            <div class="progress-bar" id="overallProgressBar"></div>
+            <div class="progress-text" id="overallProgressText">0%</div>
+        </div>
+
+        <!-- Individual progress bars -->
+        <div id="progressBars"></div>
+    </div>
+
+    <script src="https://unpkg.com/heic2any"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.5.0/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.2/FileSaver.min.js"></script>
+    <script>
+        document.getElementById('convertButton').addEventListener('click', async function() {
+            var heicUpload = document.getElementById('heicUpload');
+            var progressBarsContainer = document.getElementById('progressBars');
+            var overallProgressBar = document.getElementById('overallProgressBar');
+            var overallProgressText = document.getElementById('overallProgressText');
+
+            if (heicUpload.files.length === 0) {
+                alert('Please select at least one HEIC file to convert.');
+                return;
+            }
+
+            var zip = new JSZip();
+            progressBarsContainer.innerHTML = ''; // Clear any existing progress bars
+
+            var totalFiles = heicUpload.files.length;
+            var totalProgress = 0;
+
+            // Create a progress bar for each file
+            for (var i = 0; i < totalFiles; i++) {
+                var progressBar = document.createElement('div');
+                progressBar.className = 'progress-container';
+                progressBar.innerHTML = '<div class="progress-bar" id="progressBar' + i + '"></div>';
+                progressBarsContainer.appendChild(progressBar);
+            }
+
+            for (var i = 0; i < totalFiles; i++) {
+                var heicFile = heicUpload.files[i];
+                var progressBarElement = document.getElementById('progressBar' + i);
+
+                try {
+                    // Simulate progress for each file
+                    var conversionResult = await heic2any({
+                        blob: heicFile,
+                        toType: "image/jpeg",
+                        quality: 0.8,
+                        onProgress: function (progress) {
+                            // Update the individual progress bar width
+                            progressBarElement.style.width = (progress * 100) + '%';
+                        }
+                    });
+
+                    zip.file(heicFile.name + '.jpg', conversionResult, {binary: true});
+                    progressBarElement.style.width = '100%'; // Set to full when done
+
+                    // Update overall progress
+                    totalProgress += 1;
+                    var overallPercentage = Math.round((totalProgress / totalFiles) * 100);
+                    overallProgressBar.style.width = overallPercentage + '%';
+                    overallProgressText.textContent = overallPercentage + '%';
+
+                } catch (e) {
+                    alert('Failed to convert image: ' + heicFile.name);
+                }
+            }
+
+            zip.generateAsync({type:"blob"})
+            .then(function(content) {
+                saveAs(content, "converted_images.zip");
+            });
+        });
+    </script>
+</body>
+</html>
