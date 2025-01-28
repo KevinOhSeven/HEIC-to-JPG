@@ -55,6 +55,13 @@ Contributions are welcome! To contribute:
 
 ## License
 This project is licensed under the Apache License 2.0. See the `LICENSE` file for details.
+1. Usage: People can use the project for any purpose, including commercial use.
+2. Modification: People can modify the project’s source code to suit their needs.
+3. Distribution: Users can distribute the original or modified code to others.
+4. Private Use: Users are not required to release their modified code unless they choose to.
+5. License Inclusion: When redistributing the code, users must include a copy of the Apache 2.0 license and any notices that were part of the original code.
+6. State Changes: If users modify the code and distribute it, they must clearly indicate that changes were made.
+7. Patents: The license provides an express grant of patent rights from contributors to users, ensuring that they can use the software without fear of infringement lawsuits from the contributors.
 
 ## Support
 If you encounter issues or have questions, open an issue in the [Issues](https://github.com/your-repo/issues) section.
