@@ -49,7 +49,7 @@ Contributions are welcome! To contribute:
 3. Submit a pull request.
 
 ## License
-This project is licensed under the MIT License. See the `LICENSE` file for details.
+This project is licensed under the Apache License 2.0. See the `LICENSE` file for details.
 
 ## Support
 If you encounter issues or have questions, open an issue in the [Issues](https://github.com/your-repo/issues) section.
